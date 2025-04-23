@@ -20,4 +20,8 @@ unordered_map<string, list<CityData>::iterator> cacheMap;
 const int CHACHE_SIZE = 10;
 const string CSV_FILE = "world_cities.csv";
 
+string makeKey(const string& country, const string& city) {
+    return country + "," + city;
+}
+
 ```
