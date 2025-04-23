@@ -24,4 +24,34 @@ string makeKey(const string& country, const string& city) {
     return country + "," + city;
 }
 
+int searchCSV(const string& country, const string& city) {
+    ifstream file(CSV_FILE);
+    if (!file.is_open()) {
+        cerr << "Error: Could not open file " << CSV_FILE << endl;
+        return -1;
+    }
+
+    string line;
+    getline(file, line); //skip the header
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string token;
+        string cCode;
+        string cName;
+        int pop;
+
+        getline(ss, cCode, ',');
+        getline(ss, cName, ',');
+        getline(ss, token, ',');
+        pop = stoi(token);
+
+        if (cCode == country && cName == city) {
+            return pop;
+        }
+    }
+
+    return -1;
+}
+
 ```
