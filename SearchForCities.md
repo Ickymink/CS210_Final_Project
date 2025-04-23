@@ -87,4 +87,33 @@ int getPopulation(const string& country, const string& city) {
     return population;
 }
 
+int main() {
+    string country;
+    string city;
+
+    while (true) {
+        cout << "Enter a country code (type 'exit' to quit): ";
+        //cin >> country;
+        getline(cin, country);
+        if (country == "exit") {
+            break;
+        }
+
+        cout << "Enter a city name: ";
+        //cin.ignore();
+        getline(cin, city);
+
+        int pop = getPopulation(country, city);
+        if (pop != -1) {
+            cout << "The population of " << city << ", " << country << " is " << pop << endl;
+        }
+        else {
+            cout << "The city was not found in the file" << endl;
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+
 ```
