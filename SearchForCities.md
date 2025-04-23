@@ -72,5 +72,19 @@ void updateCache(const string& country, const string& city, int population) {
     }
 }
 
+int getPopulation(const string& country, const string& city) {
+    string key = makeKey(country, city);
+
+    if (cacheMap.find(key) != cacheMap.end()) {
+        cout << "(From Cache)"; //to signal that the data was recieved from cache
+        return cacheMap[key]->population;
+    }
+
+    int population = searchCSV(country, city);
+    if (population != -1) {
+        updateCache(country, city, population);
+    }
+    return population;
+}
 
 ```
