@@ -54,4 +54,23 @@ int searchCSV(const string& country, const string& city) {
     return -1;
 }
 
+void updateCache(const string& country, const string& city, int population) {
+    string key = makeKey(country, city);
+
+    if (cacheMap.find(key) != cacheMap.end()) {
+        cacheList.erase(cacheMap[key]);
+        cacheMap.erase(key);
+    }
+
+    cacheList.push_front({key, country, population});
+    cacheMap[key] = cacheList.begin();
+
+    if (cacheList.size() > CHACHE_SIZE) {
+        CityData last = cacheList.back();
+        cacheMap.erase(makeKey(last.countryCode, last.cityName));
+        cacheList.pop_back();
+    }
+}
+
+
 ```
