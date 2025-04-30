@@ -21,6 +21,13 @@ string makeKey(const string& country, const string& city) {
     return country + "," + city;
 }
 
+class CacheStrategy {
+public:
+    virtual int get(const string& country, const string& city) = 0;
+    virtual void put(const string& country, const string& city, int population) = 0;
+    virtual ~CacheStrategy() {}
+};
+
 int searchCSV(const string& country, const string& city) {
     ifstream file(CSV_FILE);
     if (!file.is_open()) {
