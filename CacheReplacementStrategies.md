@@ -182,22 +182,47 @@ public:
 };
 
 int main() {
+    srand(time(0));
     string country;
     string city;
+    int choice;
+
+    cout << "Choose cache replacement strategy: " << endl;;
+    cout << "1. LFU" << endl;
+    cout << "2. FIFO" << endl;
+    cout << "3. Random Replacement" << endl;
+    cout << "Enter choice (1-3): ";
+    cin >> choice;
+    cin.ignore();
+
+    CacheStrategy* cache = nullptr;
+
+    switch (choice) {
+        case 1:
+            cache = new LFUCache();
+            break;
+        case 2:
+            cache = new FIFOCache();
+            break;
+        case 3:
+            cache = new RandomCache();
+            break;
+        default:
+            cout << "Invalid choice." << endl;
+            return 1;
+    }
 
     while (true) {
         cout << "Enter a country code (type 'exit' to quit): ";
-        //cin >> country;
         getline(cin, country);
         if (country == "exit") {
             break;
         }
 
         cout << "Enter a city name: ";
-        //cin.ignore();
         getline(cin, city);
 
-        int pop = getPopulation(country, city);
+        int pop = cache->get(country, city);
         if (pop != -1) {
             cout << "The population of " << city << ", " << country << " is " << pop << endl;
         }
@@ -206,6 +231,8 @@ int main() {
         }
         cout << endl;
     }
+
+    delete cache;
 
     return 0;
 }
