@@ -8,6 +8,9 @@
 
 using namespace std;
 
+const int CHACHE_SIZE = 10;
+const string CSV_FILE = "world_cities.csv";
+
 struct CityData {
     string countryCode;
     string cityName;
