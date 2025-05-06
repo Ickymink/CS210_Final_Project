@@ -9,6 +9,9 @@
 
 using namespace std;
 
+const int CACHE_SIZE = 10;
+const string CSV_FILE = "world_cities.csv";
+
 struct TrieNode {
     bool isEndOfWord;
     unordered_map<char, TrieNode*> children;
@@ -54,6 +57,17 @@ public:
         return -1;
     }
 };
+
+struct CityData {
+    string countryCode;
+    string cityName;
+    int population;
+};
+
+string makeKey(const string& country, const string& city) {
+    return country + "," + city;
+}
+
 
 
 ```
