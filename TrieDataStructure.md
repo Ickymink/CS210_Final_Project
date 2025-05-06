@@ -149,4 +149,36 @@ public:
     }
 };
 
+class FIFOCache : public CacheStrategy {
+private:
+    list<CityData> cacheList;
+    unordered_map<string, list<CityData>::iterator> cacheMap;
+
+public:
+    int get(const string& country, const string& city) override {
+        string key = makeKey(country, city);
+        if (cacheMap.find(key) != cacheMap.end()) {
+            cout << "(From Cache)" << endl;
+            return cacheMap[key]->population;
+        }
+        return -1;
+    }
+
+    void put(const string& country, const string& city, int population) override {
+        string key = makeKey(country, city);
+        if (cacheMap.find(key) != cacheMap.end()) {
+            return;
+        }
+
+        if (cacheList.size() >= CACHE_SIZE) {
+            CityData oldest = cacheList.front();
+            cacheMap.erase(makeKey(oldest.countryCode, oldest.cityName));
+            cacheList.pop_front();
+        }
+
+        cacheList.push_back({country, city, population});
+        cacheMap[key] = --cacheList.end();
+    }
+};
+
 ```
