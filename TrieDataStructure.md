@@ -98,4 +98,55 @@ void loadCSV(CityTrie& cityTrie, string filename) {
     file.close();
 }
 
+class CacheStrategy {
+public:
+    virtual int get(const string& country, const string& city) = 0;
+    virtual void put(const string& country, const string& city, int population) = 0;
+    virtual ~CacheStrategy() {}
+};
+
+class LFUCache : public CacheStrategy {
+private:
+    struct LFUEntry {
+        CityData data;
+        int frequency;
+    };
+
+    list<LFUEntry> cacheList;
+    unordered_map<string, list<LFUEntry>::iterator> cacheMap;
+
+public:
+    int get(const string& country, const string& city) override {
+        string key = makeKey(country, city);
+        if (cacheMap.find(key) != cacheMap.end()) {
+            cacheMap[key]->frequency++;
+            cout << "(From Cache)" << endl;
+            return cacheMap[key]->data.population;
+        }
+        return -1;
+    }
+
+    void put(const string& country, const string& city, int population) override {
+        string key = makeKey(country, city);
+
+        if (cacheMap.find(key) != cacheMap.end()) {
+            return;
+        }
+
+        if (cacheList.size() >= CACHE_SIZE) {
+            auto leastUsed = cacheList.begin();
+            for (auto i = cacheList.begin(); i != cacheList.end(); i++) {
+                if (i->frequency < leastUsed->frequency || (i->frequency == leastUsed->frequency && distance(cacheList.begin(), i) > distance(cacheList.begin(), leastUsed))) {
+                    leastUsed = i;
+                }
+            }
+            cacheMap.erase(makeKey(leastUsed->data.countryCode, leastUsed->data.cityName));
+            cacheList.erase(leastUsed);
+        }
+
+        cacheList.push_back({{country, city, population}, 1});
+        cacheMap[key] = --cacheList.end();
+    }
+};
+
 ```
