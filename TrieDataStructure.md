@@ -181,4 +181,39 @@ public:
     }
 };
 
+class RandomCache : public CacheStrategy {
+private:
+    vector<CityData> cacheVec;
+    unordered_map<string, int> cacheMap;
+
+public:
+    int get(const string& country, const string& city) override {
+        string key = makeKey(country, city);
+        if (cacheMap.find(key) != cacheMap.end()) {
+            cout << "(From Cache)" << endl;
+            return cacheVec[cacheMap[key]].population;
+        }
+        return -1;
+    }
+
+    void put(const string& country, const string& city, int population) override {
+        string key = makeKey(country, city);
+        if (cacheMap.find(key) != cacheMap.end()) {
+            return;
+        }
+
+        if (cacheVec.size() >= CACHE_SIZE) {
+            int index = rand() % CACHE_SIZE;
+            string oldKey = makeKey(cacheVec[index].countryCode, cacheVec[index].cityName);
+            cacheMap.erase(oldKey);
+            cacheVec[index] = {country, city, population};
+            cacheMap[key] = index;
+        }
+        else {
+            cacheVec.push_back({country, city, population});
+            cacheMap[key] = cacheVec.size() - 1;
+        }
+    }
+};
+
 ```
