@@ -68,6 +68,34 @@ string makeKey(const string& country, const string& city) {
     return country + "," + city;
 }
 
+void loadCSV(CityTrie& cityTrie, string filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Error: Could not open file " << filename << endl;
+        return;
+    }
 
+    string line;
+    getline(file, line);
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string country;
+        string city;
+        string popstr;
+
+        int population;
+
+        getline(ss, country, ',');
+        getline(ss, city, ',');
+        getline(ss, popstr, ',');
+
+        population = stoi(popstr);
+
+        cityTrie.insert(city, country, population);
+    }
+
+    file.close();
+}
 
 ```
