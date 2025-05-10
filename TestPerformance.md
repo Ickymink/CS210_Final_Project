@@ -249,6 +249,32 @@ vector<pair<string, string>> generateCities(CityTrie& trie, int numCities) {
     return cities;
 }
 
+void runTest(const string& strategyName, CacheStrategy& cache, CityTrie& trie, const vector<pair<string, string>>& cities) {
+    int cacheHits = 0;
+    auto start = high_resolution_clock::now();
+
+    for (const auto& city : cities) {
+        int pop = cache.get(city.second, city.first);
+        if (pop == -1) {
+            pop = trie.getPopulation(city.first, city.second);
+            if (pop != -1) {
+                cache.put(city.second, city.first, pop);
+            }
+        }
+        else {
+            cacheHits++;
+        }
+    }
+
+    auto end = high_resolution_clock::now();
+    double duration = duration_cast<microseconds>(end - start).count();
+    double hitRate = (cacheHits * 100.0) / cities.size();
+
+    ofstream logFile(TEST_OUTPUT, ios::app);
+    logFile << strategyName << "," << duration << " ms," << duration / cities.size() << " ms," << hitRate << "%" << endl;
+    logFile.close();
+}
+
 int main() {
     srand(time(0));
 
