@@ -6,11 +6,17 @@
 #include <fstream>
 #include <vector>
 #include <list>
+#include <random>
+#include <string>
+#include <chrono>
 
 using namespace std;
+using namespace chrono;
 
 const int CACHE_SIZE = 10;
+const int NUM_LOOKUPS = 1000;
 const string CSV_FILE = "world_cities.csv";
+const string TEST_OUTPUT = "results.csv";
 
 struct TrieNode {
     bool isEndOfWord;
