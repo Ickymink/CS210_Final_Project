@@ -222,6 +222,33 @@ public:
     }
 };
 
+vector<pair<string, string>> generateCities(CityTrie& trie, int numCities) {
+    vector<pair<string, string>> cities;
+    ifstream file(CSV_FILE);
+    string line;
+    getline(file, line);
+
+    vector<pair<string, string>> cityList;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string country;
+        string city;
+        getline(ss, country, ',');
+        getline(ss, city, ',');
+        cityList.push_back({city, country});
+    }
+
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dist(0, cityList.size() - 1);
+
+    for (int i = 0; i < numCities; i++) {
+        cities.push_back(cityList[dist(gen)]);
+    }
+
+    return cities;
+}
+
 int main() {
     srand(time(0));
 
