@@ -126,7 +126,7 @@ public:
         string key = makeKey(country, city);
         if (cacheMap.find(key) != cacheMap.end()) {
             cacheMap[key]->frequency++;
-            cout << "(From Cache)" << endl;
+            //cout << "(From Cache)" << endl;
             return cacheMap[key]->data.population;
         }
         return -1;
@@ -164,7 +164,7 @@ public:
     int get(const string& country, const string& city) override {
         string key = makeKey(country, city);
         if (cacheMap.find(key) != cacheMap.end()) {
-            cout << "(From Cache)" << endl;
+            //cout << "(From Cache)" << endl;
             return cacheMap[key]->population;
         }
         return -1;
@@ -196,7 +196,7 @@ public:
     int get(const string& country, const string& city) override {
         string key = makeKey(country, city);
         if (cacheMap.find(key) != cacheMap.end()) {
-            cout << "(From Cache)" << endl;
+            //cout << "(From Cache)" << endl;
             return cacheVec[cacheMap[key]].population;
         }
         return -1;
